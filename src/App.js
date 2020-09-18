@@ -56,7 +56,11 @@ function App() {
       <div>
         <LogoutButton user={user} />
         <h3>Blogs</h3>
-        <CreateBlogForm setBlogs={setBlogs} setNotification={setNotification} />
+        <CreateBlogForm
+          blogs={blogs}
+          setBlogs={setBlogs}
+          setNotification={setNotification}
+        />
         {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />
         ))}
