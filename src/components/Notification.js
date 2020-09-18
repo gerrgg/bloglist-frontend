@@ -1,11 +1,11 @@
 import React from "react";
 
-const Notification = ({ notificationMessage, notificationClass }) => {
-  if (!notificationMessage || !notificationClass) return null;
+const Notification = ({ notification }) => {
+  if (!notification.message) return null;
 
   return (
-    <p className={`notifications ${notificationClass}`}>
-      {notificationMessage}
+    <p className={`notifications ${notification.type}`}>
+      {notification.message}
     </p>
   );
 };

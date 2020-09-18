@@ -3,6 +3,7 @@ import "./App.scss";
 
 // components
 import Blog from "./components/Blog";
+import CreateBlogForm from "./components/CreateBlogForm";
 import LoginForm from "./components/LoginForm";
 import Notification from "./components/Notification";
 
@@ -13,14 +14,22 @@ import loginService from "./services/login";
 // GO!
 function App() {
   const [blogs, setBlogs] = useState([]);
-  const [notificationMessage, setNotificationMessage] = useState(null);
-  const [notificationClass, setNotificationClass] = useState(null);
+  const [notification, setNotification] = useState({});
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
+  }, []);
+
+  useEffect(() => {
+    const loggedInUser = window.localStorage.getItem("loggedInUser");
+    if (loggedInUser) {
+      const user = JSON.parse(loggedInUser);
+      setUser(user);
+      blogService.setToken(user.token);
+    }
   }, []);
 
   const loginForm = () => (
@@ -33,43 +42,82 @@ function App() {
     />
   );
 
-  const blogForm = () => <p>Blog form here</p>;
+  const Logo = () => (
+    <h2>
+      Free Speech
+      <span role="img" aria-label="parrot">
+        🦜
+      </span>
+    </h2>
+  );
+
+  const blogForm = () => {
+    return (
+      <div>
+        <LogoutButton user={user} />
+        <h3>Blogs</h3>
+        <CreateBlogForm setBlogs={setBlogs} setNotification={setNotification} />
+        {blogs.map((blog) => (
+          <Blog key={blog.id} blog={blog} />
+        ))}
+      </div>
+    );
+  };
+
+  const LogoutButton = ({ user }) => {
+    const logoutUser = () => {
+      window.localStorage.removeItem("loggedInUser");
+      setUser(null);
+    };
+
+    return (
+      <div id="logout">
+        <strong>{user.name} is logged in</strong>
+        <br />
+        <button onClick={() => logoutUser()}>Logout</button>
+      </div>
+    );
+  };
 
   const handleLogin = async (event) => {
     event.preventDefault();
 
     try {
+      // get user
       const user = await loginService.login({
         username,
         password,
       });
 
+      // save user to localStorage
+      window.localStorage.setItem("loggedInUser", JSON.stringify(user));
+
+      // make user token accessible to blogs
+      blogService.setToken(user.token);
+
+      // reset forms
       setUser(user);
       setUsername("");
       setPassword("");
     } catch (exception) {
-      setNotificationMessage("Invalid username/password combination");
-      setNotificationClass("error");
+      // show error for 5 seconds
+      setNotification({
+        message: "Invalid username/password combination",
+        type: "error",
+      });
 
       setTimeout(() => {
-        setNotificationMessage(null);
+        setNotification({});
       }, 5000);
     }
   };
 
   return (
     <div>
-      <Notification
-        notificationMessage={notificationMessage}
-        notificationClass={notificationClass}
-      />
+      <Logo />
+      <Notification notification={notification} />
 
       {user === null ? loginForm() : blogForm()}
-
-      <h3>Blogs</h3>
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
     </div>
   );
 }
