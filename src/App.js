@@ -6,6 +6,7 @@ import Blog from "./components/Blog";
 import CreateBlogForm from "./components/CreateBlogForm";
 import LoginForm from "./components/LoginForm";
 import Notification from "./components/Notification";
+import Togglable from "./components/Togglable";
 
 // services
 import blogService from "./services/blogs";
@@ -55,15 +56,19 @@ function App() {
     return (
       <div>
         <LogoutButton user={user} />
-        <h3>Blogs</h3>
-        <CreateBlogForm
-          blogs={blogs}
-          setBlogs={setBlogs}
-          setNotification={setNotification}
-        />
-        {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} />
-        ))}
+        <div className="blogs">
+          <h3>Blogs</h3>
+          <Togglable buttonLabel="Create Blog">
+            <CreateBlogForm
+              blogs={blogs}
+              setBlogs={setBlogs}
+              setNotification={setNotification}
+            />
+          </Togglable>
+          {blogs.map((blog) => (
+            <Blog key={blog.id} blog={blog} />
+          ))}
+        </div>
       </div>
     );
   };
