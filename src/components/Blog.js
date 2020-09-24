@@ -5,8 +5,10 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
 
   return (
     <div className="blog">
-      {blog.title} - {blog.author ? blog.author : "No Author"}
-      {show && blog.user ? (
+      <span>
+        {blog.title} - {blog.author ? blog.author : "No Author"}
+      </span>
+      {show ? (
         <BlogDetails
           blog={blog}
           setShow={setShow}
@@ -24,18 +26,21 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
 };
 
 const BlogDetails = ({ blog, setShow, handleLike, handleDelete, user }) => {
-  console.log(blog.user, user);
   return (
     <div className="details">
-      <p>URL: {blog.url}</p>
-      <p>
-        Likes: {blog.likes}
-        <button onClick={() => handleLike(blog)}>Like</button>
-      </p>
-      <p>User: {blog.user ? blog.user.username : null}</p>
-      <button onClick={() => setShow(false)}>Hide</button>
+      <p className="url">URL: {blog.url}</p>
+      <p className="likes">Likes: {blog.likes}</p>
+      <button className="likesButton" onClick={() => handleLike(blog)}>
+        Like
+      </button>
+      <p className="user">User: {blog.user ? blog.user.username : null}</p>
+      <button className="hide" onClick={() => setShow(false)}>
+        Hide
+      </button>
       {blog.user.id === user.id ? (
-        <button onClick={() => handleDelete(blog.id)}>Delete</button>
+        <button className="delete" onClick={() => handleDelete(blog.id)}>
+          Delete
+        </button>
       ) : null}
     </div>
   );
