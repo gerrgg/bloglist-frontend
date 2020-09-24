@@ -75,7 +75,7 @@ function App() {
     <h2>
       Free Speech
       <span role="img" aria-label="parrot">
-        🦜
+        🤐
       </span>
     </h2>
   );
