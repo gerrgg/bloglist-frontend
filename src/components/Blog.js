@@ -23,19 +23,22 @@ const Blog = ({ blog, handleLike, handleDelete, user }) => {
   );
 };
 
-const BlogDetails = ({ blog, setShow, handleLike, handleDelete, user }) => (
-  <div className="details">
-    <p>URL: {blog.url}</p>
-    <p>
-      Likes: {blog.likes}
-      <button onClick={() => handleLike(blog)}>Like</button>
-    </p>
-    <p>User: {blog.user ? blog.user.username : null}</p>
-    <button onClick={() => setShow(false)}>Hide</button>
-    {blog.user.id === user.id ? (
-      <button onClick={() => handleDelete(blog.id)}>Delete</button>
-    ) : null}
-  </div>
-);
+const BlogDetails = ({ blog, setShow, handleLike, handleDelete, user }) => {
+  console.log(blog.user, user);
+  return (
+    <div className="details">
+      <p>URL: {blog.url}</p>
+      <p>
+        Likes: {blog.likes}
+        <button onClick={() => handleLike(blog)}>Like</button>
+      </p>
+      <p>User: {blog.user ? blog.user.username : null}</p>
+      <button onClick={() => setShow(false)}>Hide</button>
+      {blog.user.id === user.id ? (
+        <button onClick={() => handleDelete(blog.id)}>Delete</button>
+      ) : null}
+    </div>
+  );
+};
 
 export default Blog;

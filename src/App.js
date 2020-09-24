@@ -93,6 +93,7 @@ function App() {
               blogs={blogs}
               setBlogs={setBlogs}
               setNotification={setNotification}
+              user={user}
             />
           </Togglable>
           {blogsSortedByLike.map((blog) => (
