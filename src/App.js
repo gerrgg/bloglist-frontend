@@ -33,6 +33,8 @@ function App() {
     }
   }, []);
 
+  console.log(blogs);
+
   const handleLike = async (blog) => {
     const updatedBlog = { ...blog, likes: blog.likes + 1, user: blog.user.id };
 
@@ -43,6 +45,19 @@ function App() {
       setBlogs(blogs);
     } catch (e) {
       console.log(e.message);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await blogService.remove(id);
+      setBlogs(blogs.filter((blog) => blog.id !== id));
+      setNotification({
+        message: "blog deleted",
+        type: "success",
+      });
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -66,6 +81,8 @@ function App() {
   );
 
   const blogForm = () => {
+    const blogsSortedByLike = blogs.sort((a, b) => a.likes < b.likes);
+
     return (
       <div>
         <LogoutButton user={user} />
@@ -78,8 +95,14 @@ function App() {
               setNotification={setNotification}
             />
           </Togglable>
-          {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} handleLike={handleLike} />
+          {blogsSortedByLike.map((blog) => (
+            <Blog
+              key={blog.id}
+              blog={blog}
+              handleLike={handleLike}
+              handleDelete={handleDelete}
+              user={user}
+            />
           ))}
         </div>
       </div>
