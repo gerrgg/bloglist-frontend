@@ -86,16 +86,16 @@ function App() {
     return (
       <div>
         <LogoutButton user={user} />
+        <h3>Blogs</h3>
+        <Togglable buttonLabel="Create Blog">
+          <CreateBlogForm
+            blogs={blogs}
+            setBlogs={setBlogs}
+            setNotification={setNotification}
+            user={user}
+          />
+        </Togglable>
         <div className="blogs">
-          <h3>Blogs</h3>
-          <Togglable buttonLabel="Create Blog">
-            <CreateBlogForm
-              blogs={blogs}
-              setBlogs={setBlogs}
-              setNotification={setNotification}
-              user={user}
-            />
-          </Togglable>
           {blogsSortedByLike.map((blog) => (
             <Blog
               key={blog.id}

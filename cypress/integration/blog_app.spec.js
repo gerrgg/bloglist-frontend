@@ -81,6 +81,30 @@ describe("Blog app", function () {
         cy.login(otherUser.username, otherUser.password);
         cy.get("button.delete").should("not.exist");
       });
+
+      it("blogs are sorted by likes", function () {
+        cy.createBlog({
+          title: "Hideaway: A Novel",
+          author: "Nora Roberts",
+          url: "example.com/nora",
+        });
+
+        cy.createBlog({
+          title: "Bobiverse",
+          author: "Diablo Kody",
+          url: "example.com/diablo",
+        });
+
+        cy.get(".blog:last").contains("View").click();
+
+        cy.get(".blog:last")
+          .find(".likesButton")
+          .click()
+          .then(() => {
+            cy.visit("http://localhost:3000");
+            cy.get(".blog:first").contains("Bobiverse - Diablo Kody");
+          });
+      });
     });
   });
 });
